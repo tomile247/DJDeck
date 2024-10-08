@@ -1,5 +1,4 @@
 class DJPad extends HTMLElement {
-
     static observedAttributes = ["data-src"];
 
     constructor() {
@@ -24,12 +23,7 @@ class DJPad extends HTMLElement {
 
         const style = document.createElement('style');
 
-        style.textContent = `
-
-            dj-pad[active] {
-              border: 2px solid red;
-            }
-
+        style.textContent = `        
             .dj-pad__wrapper {
                 height: 100px;
                 width: 100px;
@@ -38,6 +32,12 @@ class DJPad extends HTMLElement {
                 align-items: center;
                 background: #${color};
                 border-radius: 20px;
+                transition: all 500ms;
+                border: 5px solid black;
+            }
+
+            .dj-pad__wrapper[active] {
+                border-color: yellow;               
             }
         `
 
@@ -47,17 +47,20 @@ class DJPad extends HTMLElement {
         wrapper.appendChild(label);
 
         this.addEventListener('click', function(event) {                          
-          this.play();          
+          this.play();
+          wrapper.setAttribute('active', '');
+                    
         }.bind(this))
         
         document.addEventListener('keypress', function(event) {          
           if (event.key.toUpperCase() === key) {                      
             this.play();
+            wrapper.setAttribute('active', '');
           }
         }.bind(this))
 
-        this.addEventListener('transitionend', function(event) {
-            alert('')
+        wrapper.addEventListener('transitionend', function(event) {
+            wrapper.removeAttribute('active');
         })
         
         console.log("Custom element added to page.");
@@ -76,7 +79,7 @@ class DJPad extends HTMLElement {
       }
 
     play() {
-        this.shadowRoot.querySelector('audio').play();     
+        this.shadowRoot.querySelector('audio').play();    
     };
 }
 
